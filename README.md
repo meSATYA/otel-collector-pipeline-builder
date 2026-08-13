@@ -34,13 +34,32 @@ The workflow in `.github/workflows/deploy-pages.yml` builds and deploys the site
 The Vite configuration uses relative asset paths, so it works for both user sites
 and repository sites without changing the repository name.
 
+## Automatic component updates
+
+The `.github/workflows/sync-components.yml` workflow runs every day at 03:17 UTC
+and can also be started manually from the Actions tab. It discovers the current
+receiver, processor, exporter, extension, and connector directories on the
+OpenTelemetry Collector Contrib `main` branch, refreshes their README-derived
+documentation, verifies a production build, and commits changed generated data.
+A successful sync explicitly triggers the existing GitHub Pages deployment
+workflow so automated commits are published even when they use GitHub's built-in
+workflow token.
+
+Run the same refresh locally with:
+
+```bash
+npm run sync:components
+```
+
 ## Project structure
 
 - `app/page.tsx` — component data and interface
 - `app/globals.css` — responsive visual design
 - `src/main.tsx` — browser entry point
+- `scripts/sync-component-catalog.mjs` — upstream component discovery
 - `public/` — static assets
 - `.github/workflows/deploy-pages.yml` — GitHub Pages deployment
+- `.github/workflows/sync-components.yml` — daily component refresh
 
 ## Brand icons
 

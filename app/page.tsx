@@ -57,6 +57,7 @@ function configKey(category: Category, item: string) {
 function PipelineBuilder({ selected, add, remove }: { selected: { category: Category; item: string }[]; add: (category: Category, item: string) => void; remove: (category: Category, item: string) => void }) {
   const [picker, setPicker] = useState<Category | null>(null);
   const [pickerQuery, setPickerQuery] = useState("");
+  const [validation, setValidation] = useState<{ valid: boolean; issues: string[] } | null>(null);
   const grouped = Object.fromEntries(order.map((category) => [category, selected.filter((entry) => entry.category === category)])) as Record<Category, { category: Category; item: string }[]>;
   const signals = ["traces", "metrics", "logs", "profiles"].filter((signal) => selected.some(({ item }) => componentDocs[item]?.pipelineTypes.includes(signal)));
   const pipelineSignals = signals.length ? signals : ["traces", "metrics", "logs"];
@@ -66,15 +67,30 @@ function PipelineBuilder({ selected, add, remove }: { selected: { category: Cate
   const extensions = grouped.extensions.map(({ item }) => configKey("extensions", item));
   const connectors = grouped.connectors.map(({ item }) => configKey("connectors", item));
   const forSignal = (category: Category, signal: string) => grouped[category].filter(({ item }) => !componentDocs[item]?.pipelineTypes.length || componentDocs[item].pipelineTypes.includes(signal)).map(({ item }) => configKey(category, item));
+  const compatibleSignals = pipelineSignals.filter((signal) => forSignal("receivers", signal).length && forSignal("exporters", signal).length);
+  const outputSignals = receivers.length && exporters.length ? compatibleSignals : pipelineSignals;
   const block = (label: string, values: string[]) => `${label}:\n${values.length ? values.map((value) => `  ${value}:\n    # TODO: add required ${value} settings from its README`).join("\n") : "  {}"}`;
-  const yaml = [block("receivers", receivers), block("processors", processors), block("exporters", exporters), block("connectors", connectors), block("extensions", extensions), "service:", ...(extensions.length ? [`  extensions: [${extensions.join(", ")}]`] : []), "  pipelines:", ...pipelineSignals.map((signal) => `    ${signal}:\n      receivers: [${forSignal("receivers", signal).join(", ")}]\n      processors: [${forSignal("processors", signal).join(", ")}]\n      exporters: [${forSignal("exporters", signal).join(", ")}]`), ...(connectors.length ? ["  # Connectors must be added to compatible source and destination pipelines."] : [])].join("\n\n");
-  const ready = receivers.length > 0 && exporters.length > 0;
+  const yaml = [block("receivers", receivers), block("processors", processors), block("exporters", exporters), block("connectors", connectors), block("extensions", extensions), "service:", ...(extensions.length ? [`  extensions: [${extensions.join(", ")}]`] : []), "  pipelines:", ...outputSignals.map((signal) => `    ${signal}:\n      receivers: [${forSignal("receivers", signal).join(", ")}]\n      processors: [${forSignal("processors", signal).join(", ")}]\n      exporters: [${forSignal("exporters", signal).join(", ")}]`), ...(connectors.length ? ["  # Connectors must be added to compatible source and destination pipelines."] : [])].join("\n\n");
+  const ready = compatibleSignals.length > 0;
   const copy = (value: string) => navigator.clipboard.writeText(value);
   const download = () => { const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([yaml], { type: "text/yaml" })); link.download = "otel-collector-config.yaml"; link.click(); URL.revokeObjectURL(link.href); };
+  const validateCommand = "otelcol validate --config=otel-collector-config.yaml";
+  const dockerValidateCommand = "docker run --rm -v \"$PWD/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro\" otel/opentelemetry-collector-contrib:latest validate --config=/etc/otelcol-contrib/config.yaml";
   const command = "docker run --rm -p 4317:4317 -p 4318:4318 -v \"$PWD/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml\" otel/opentelemetry-collector-contrib:latest";
   const pickerItems = picker ? data[picker].filter((item) => item.toLowerCase().includes(pickerQuery.toLowerCase()) && !selected.some((entry) => entry.category === picker && entry.item === item)) : [];
   const openPicker = (category: Category) => { setPicker(category); setPickerQuery(""); };
   const choose = (category: Category, item: string) => { add(category, item); setPicker(null); setPickerQuery(""); };
+  const validate = () => {
+    const issues: string[] = [];
+    if (!receivers.length) issues.push("Add at least one receiver.");
+    if (!exporters.length) issues.push("Add at least one exporter.");
+    if (receivers.length && exporters.length && !compatibleSignals.length) {
+      issues.push("Select a receiver and exporter that support at least one common pipeline type.");
+    }
+    setValidation({ valid: issues.length === 0, issues });
+  };
+
+  useEffect(() => setValidation(null), [yaml]);
   return <section className="builder" id="pipeline-builder" aria-labelledby="builder-title">
     <div className="builder-heading"><div><p className="eyebrow"><span /> VISUAL PIPELINE DESIGNER</p><h2 id="builder-title">Build your telemetry pipeline</h2><p>Select objects from the catalog, review the flow, then export a deployable Collector configuration.</p></div><span className="selection-count">{selected.length} selected</span></div>
     <>
@@ -85,7 +101,14 @@ function PipelineBuilder({ selected, add, remove }: { selected: { category: Cate
       <div className="workflow supporting-workflow" aria-label="Connector and extension workflow">
         {(["connectors", "extensions"] as Category[]).map((category, index) => <div className="workflow-stage" key={category}><div className="stage-title"><span>{index + 4}</span><strong>{category}</strong><small>{grouped[category].length}</small></div><div className="stage-items">{grouped[category].map(({ item }) => { const logo = componentLogos[item]; return <div className="flow-node" key={item}><img src={logo ? `./logos/${logo.slug}.svg` : "./logos/component-placeholder.svg"} alt="" /><span>{displayName(item, meta[category].singular)}</span><button onClick={() => remove(category, item)} aria-label={`Remove ${item}`}>×</button></div>; })}<button className="stage-placeholder" onClick={() => openPicker(category)}><span>+</span>Add {meta[category].singular}</button></div></div>)}
       </div>
-      <div className="config-layout"><section className="yaml-panel"><header><div><strong>otel-collector-config.yaml</strong><small>{ready ? "Pipeline structure ready" : "Add at least one receiver and exporter"}</small></div><div><button onClick={() => copy(yaml)}>Copy</button><button onClick={download}>Download</button></div></header><pre><code>{yaml}</code></pre></section><aside className="deploy-panel"><p>DEPLOY COLLECTOR</p><h3>Run with Docker</h3><ol><li>Download the YAML configuration.</li><li>Fill every <code>TODO</code> using its component README.</li><li>Run the command below from that directory.</li></ol><pre>{command}</pre><button onClick={() => copy(command)}>Copy deploy command</button><div className={`readiness ${ready ? "ready" : ""}`}><span />{ready ? "Receiver and exporter selected" : "Pipeline needs a receiver and exporter"}</div></aside></div>
+      <div className="config-layout">
+        <section className="yaml-panel">
+          <header><div><strong>otel-collector-config.yaml</strong><small>{ready ? "Pipeline structure ready" : "Add at least one receiver and exporter"}</small></div><div>{selected.length > 0 && <button className="validate-config-button" onClick={validate}>✓ Validate</button>}<button onClick={() => copy(yaml)}>Copy</button><button onClick={download}>Download</button></div></header>
+          {validation && <div className={`validation-result ${validation.valid ? "valid" : "invalid"}`} role="status"><div><strong>{validation.valid ? "Structure check passed" : "Configuration needs attention"}</strong><small>{validation.valid ? "Resolve every TODO, then run the Collector validator for component-level checks." : validation.issues.join(" ")}</small></div><code>{validateCommand}</code><div className="validation-actions"><button onClick={() => copy(validateCommand)}>Copy command</button><button onClick={() => copy(dockerValidateCommand)}>Copy Docker command</button><a href="https://opentelemetry.io/docs/collector/configuration/#location" target="_blank" rel="noreferrer">Validation docs ↗</a></div></div>}
+          <pre><code>{yaml}</code></pre>
+        </section>
+        <aside className="deploy-panel"><p>DEPLOY COLLECTOR</p><h3>Run with Docker</h3><ol><li>Download the YAML configuration.</li><li>Fill every <code>TODO</code> using its component README.</li><li>Validate it with the Collector, then run the command below.</li></ol><pre>{command}</pre><button onClick={() => copy(command)}>Copy deploy command</button><div className={`readiness ${ready ? "ready" : ""}`}><span />{ready ? "Receiver and exporter selected" : "Pipeline needs a receiver and exporter"}</div></aside>
+      </div>
     </>
     {picker && <div className="picker-overlay" onMouseDown={(event) => { if (event.target === event.currentTarget) setPicker(null); }}><section className="component-picker" role="dialog" aria-modal="true" aria-labelledby="picker-title"><header><div><p>ADD TO PIPELINE</p><h3 id="picker-title">Choose a {meta[picker].singular}</h3></div><button onClick={() => setPicker(null)} aria-label="Close component picker">×</button></header><label><span>⌕</span><input autoFocus value={pickerQuery} onChange={(event) => setPickerQuery(event.target.value)} placeholder={`Search ${picker}…`} /></label><div className="picker-grid">{pickerItems.length ? pickerItems.map((item) => { const logo = componentLogos[item]; return <button key={item} onClick={() => choose(picker, item)}><img src={logo ? `./logos/${logo.slug}.svg` : "./logos/component-placeholder.svg"} alt="" /><span><strong>{displayName(item, meta[picker].singular)}</strong><small>{componentDocs[item]?.pipelineTypes.join(", ") || "No pipeline type specified"}</small></span><b>+</b></button>; }) : <p>No more matching {picker}.</p>}</div></section></div>}
   </section>;

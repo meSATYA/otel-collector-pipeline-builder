@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "sync:catalog": "node scripts/sync-component-catalog.mjs",
     "sync:docs": "node scripts/sync-component-docs.mjs",
+    "sync:components": "npm run sync:catalog && npm run sync:docs",
     "sync:logos": "node scripts/sync-brand-logos.mjs"
   },
   "dependencies": {
