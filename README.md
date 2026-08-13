@@ -1,7 +1,10 @@
-# OTel Collector Contrib Component Explorer
+# OpenTelemetry Collector Pipeline Builder
+
+![OpenTelemetry Collector Pipeline Builder](public/readme-banner.png)
 
 A static React interface for browsing OpenTelemetry Collector Contrib receivers,
-processors, exporters, extensions, and connectors.
+processors, exporters, extensions, and connectors, then assembling them into a
+visual pipeline with a generated Collector YAML configuration.
 
 ## Local development
 

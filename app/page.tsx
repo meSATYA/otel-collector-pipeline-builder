@@ -157,9 +157,9 @@ export default function Home() {
   return (
     <main className="app-shell">
       <aside className="sidebar">
-        <a className="brand" href="#top" onClick={() => jumpTo("all")} aria-label="OTel Collector Contrib Explorer home">
+        <a className="brand" href="#top" onClick={() => jumpTo("all")} aria-label="OTel Collector Pipeline Builder home">
           <span className="brand-mark"><i /><i /><i /></span>
-          <span><strong>OTel </strong><strong>Collector </strong><strong>Contrib</strong><small>Component explorer</small></span>
+          <span><strong>OTel </strong><strong>Collector </strong><small>Pipeline Builder</small></span>
         </a>
         <nav aria-label="Component categories">
           <p className="nav-label">Browse components</p>
