@@ -150,13 +150,24 @@ export default function Home() {
   };
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return Object.fromEntries(order.map((category) => [category, data[category].filter((item) => item.toLowerCase().includes(q))])) as unknown as Record<Category, readonly string[]>;
+    const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    return Object.fromEntries(order.map((category) => [category, data[category].filter((item) => {
+      if (!terms.length) return true;
+      const doc = componentDocs[item];
+      const searchable = [item, displayName(item, meta[category].singular), category, doc?.description, doc?.pipelineTypes.join(" ")].filter(Boolean).join(" ").toLowerCase();
+      const compact = searchable.replace(/[^a-z0-9]/g, "");
+      return terms.every((term) => searchable.includes(term) || compact.includes(term.replace(/[^a-z0-9]/g, "")));
+    })])) as unknown as Record<Category, readonly string[]>;
   }, [query]);
 
   const total = order.reduce((sum, key) => sum + data[key].length, 0);
   const results = order.reduce((sum, key) => sum + filtered[key].length, 0);
-  const visible = active === "all" ? order : active === "pipeline" ? [] : [active];
+  const visible = query.trim() ? order.filter((category) => filtered[category].length > 0) : active === "all" ? order : active === "pipeline" ? [] : [active];
+
+  const search = (value: string) => {
+    setQuery(value);
+    if (value.trim()) setActive("all");
+  };
 
   const jumpTo = (category: View) => {
     setActive(category);
@@ -221,7 +232,7 @@ export default function Home() {
           <div className="search-row" id="catalog">
             <label className="search-box">
               <span>⌕</span>
-              <input ref={searchRef} value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search all components…" aria-label="Search components" />
+              <input ref={searchRef} value={query} onChange={(e) => search(e.target.value)} placeholder="Search all components…" aria-label="Search components" />
               {query ? <button onClick={() => setQuery("")} aria-label="Clear search">×</button> : <kbd>⌘ K</kbd>}
             </label>
             <p><strong>{query ? results : total}</strong> {query ? "matches" : "components"} <span>across 5 categories</span></p>
@@ -234,7 +245,7 @@ export default function Home() {
           </div>
 
           {active === "pipeline" ? <PipelineBuilder selected={pipeline} add={addToPipeline} remove={removeFromPipeline} /> : <section className="component-list" aria-live="polite">
-            {visible.map((category) => {
+             {visible.map((category) => {
               const expanded = open.has(category) || Boolean(query);
               return <article className={`category-panel ${expanded ? "expanded" : ""}`} id={category} key={category}>
                 <button className="panel-head" aria-expanded={expanded} onClick={() => toggle(category)}>
@@ -254,8 +265,9 @@ export default function Home() {
                   </div> : <div className="empty-state"><span>⌕</span><strong>No {category} found</strong><p>Try a broader search term.</p></div>}
                   <a className="browse-category" href={`${repo}/tree/main/${meta[category].path}`} target="_blank" rel="noreferrer">Browse {category} directory on GitHub <span>↗</span></a>
                 </div>}
-              </article>;
-            })}
+               </article>;
+             })}
+            {query.trim() && results === 0 && <div className="global-empty-state"><span>⌕</span><strong>No components match “{query.trim()}”</strong><p>Try a product name, component type, telemetry signal, or repository identifier.</p><button onClick={() => setQuery("")}>Clear search</button></div>}
           </section>}
 
           {selected && (() => {
