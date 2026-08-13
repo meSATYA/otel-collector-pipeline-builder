@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-labelledby="title">
+  <title id="title">OpenTelemetry component</title>
+  <path fill="#A995FF" d="M16 2.5 27.7 9v14L16 29.5 4.3 23V9L16 2.5Zm0 3.7L7.5 10.9v10.2l8.5 4.7 8.5-4.7V10.9L16 6.2Z"/>
+  <path fill="#A995FF" d="m10 13.2 4.2 2.3v4.9L10 18.1v-4.9Zm12 0v4.9l-4.2 2.3v-4.9l4.2-2.3ZM16 8.8l4.1 2.3-4.1 2.3-4.1-2.3L16 8.8Z" opacity=".72"/>
+</svg>

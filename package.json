@@ -1,0 +1,23 @@
+{
+  "name": "otel-contrib-component-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "sync:docs": "node scripts/sync-component-docs.mjs",
+    "sync:logos": "node scripts/sync-brand-logos.mjs"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "latest",
+    "vite": "latest",
+    "typescript": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest"
+  },
+  "devDependencies": {}
+}
