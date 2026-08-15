@@ -28,7 +28,7 @@ function displayName(name: string, suffix: string) {
   const base = name.endsWith(suffix) ? name.slice(0, -suffix.length) : name;
   const words: [string, string][] = [
     ["activedirectory", "Active Directory"], ["googlecloud", "Google Cloud"], ["alibabacloud", "Alibaba Cloud"],
-    ["prometheusremotewrite", "Prometheus Remote Write"], ["opentelemetry", "OpenTelemetry"], ["elasticsearch", "Elasticsearch"],
+    ["prometheusremotewrite", "Prometheus Remote Write"], ["metricstarttime", "Metric Start Time"], ["opentelemetry", "OpenTelemetry"], ["elasticsearch", "Elasticsearch"],
     ["cloudwatchlogs", "CloudWatch Logs"], ["cloudwatch", "CloudWatch"], ["containerinsight", "Container Insights"], ["managedprometheus", "Managed Prometheus"],
     ["logicmonitor", "LogicMonitor"], ["sumologic", "Sumo Logic"], ["logzio", "Logz.io"], ["mezmo", "Mezmo"],
     ["kubeletstats", "Kubelet Stats"], ["windowseventlog", "Windows Event Log"], ["windowsperfcounters", "Windows Perf Counters"],
