@@ -241,12 +241,17 @@ export const componentDocs: Record<string, ComponentDoc> = {
   "azurefunctionsreceiver": {
     "description": "See the official azurefunctionsreceiver documentation for details.",
     "pipelineTypes": [
-      "logs"
+      "logs",
+      "metrics"
     ],
     "stability": [
       {
         "level": "development",
         "type": "logs"
+      },
+      {
+        "level": "development",
+        "type": "metrics"
       }
     ],
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/azurefunctionsreceiver/README.md",
