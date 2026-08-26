@@ -1823,6 +1823,20 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/zookeeperreceiver/README.md",
     "repoPath": "receiver/zookeeperreceiver"
   },
+  "adaptivetailsamplingprocessor": {
+    "description": "The Adaptive Tail Sampling Processor performs adaptive tail-based trace sampling using first-match rules-based routing to adaptive samplers. Each sampler produces a known sample rate which is encoded as ot=th in W3C TraceState for correct downstream metric weighting.",
+    "pipelineTypes": [
+      "traces"
+    ],
+    "stability": [
+      {
+        "level": "development",
+        "type": "traces"
+      }
+    ],
+    "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/adaptivetailsamplingprocessor/README.md",
+    "repoPath": "processor/adaptivetailsamplingprocessor"
+  },
   "attributesprocessor": {
     "description": "The attributes processor modifies attributes of a span, log, or metric. Please refer to\nconfig.go for the config spec.\n\nThis processor also supports the ability to filter and match input data to determine\nif they should be included or excluded for specified actions.\n\nIt takes a list of actions which are performed in order specified in the config.\nThe supported actions are:\n• insert: Inserts a new attribute in input data where the key does not already exist.\n• update: Updates an attribute in input data where the key does exist.\n• upsert: Performs insert or update. Inserts a new attribute in input data where the\n  key does not already exist and updates an attribute in input data where the key\n  does exist.\n• delete: Deletes an attribute from the input data.\n• hash: Hashes (SHA1) an existing attribute value.\n• extract: Extracts values using a regular expression rule from the input key\n  to target keys specified in the rule. If a target key already exists, it will\n  be overridden. Note: It behaves similar to the Span Processor toattributes\n  setting with the existing attribute as the source.\n• convert: Converts an existing attribute to a specified type.\n\nFor the actions insert, update and upsert,\n - key  is required\n - one of value, fromattribute, fromcontext, or defaultvalue is required\n - action is required.\nyaml\n  # Key specifies the attribute to act upon.\n• key: \n  action: {insert, update, upsert}\n  # Value specifies the value to populate for the key.\n  # The type is inferred from the configuration.\n  value: \n\n  # Key specifies the attribute to act upon.\n• key: \n  action: {insert, update, upsert}\n  # FromAttribute specifies the attribute from the input data to use to populate\n  # the value. If the attribute doesn't exist, no action is performed.\n  fromattribute: \n\n  # Key specifies the attribute to act upon.\n• key: \n  action: {insert, update, upsert}\n  # FromContext specifies the context value to use to populate the attribute value. \n  # If the key is prefixed with metadata., the values are searched\n  # in the receiver's transport protocol additional information like gRPC Metadata or HTTP Headers\n  # (be sure to set includemetadata: true on the receiver).\n  # If the key is prefixed with auth., the values are searched\n  # in the authentication information set by the server authenticator.\n  # Refer to the server authenticator's documentation part of your pipeline for more information about which attributes are available.\n  # If the key is client.address, the value will be set to the client address. \n  # If the key doesn't exist, no action is performed.\n  # If the key has multiple values the values will be joined with ; separator.\n  fromcontext: \n\n  # Key specifies the attribute to act upon.\n• key: \n  action: {insert, update, upsert}\n  # DefaultValue specifies the value to use if value/fromattribute/fromcontext\n  # doesn't provide a value (e.g., environment variable not set, attribute doesn't exist).\n  # Only used with INSERT, UPDATE, and UPSERT actions.\n  defaultvalue: \n\nFor the delete action,\n - key and/or pattern is required\n - action: delete is required.\nyaml\n# Key specifies the attribute to act upon.\n• key: \n  action: delete\n  # Rule specifies the regex pattern for attribute names to act upon.\n  pattern: \n\nFor the hash action,\n - key and/or pattern is required\n - action: hash is required.\nyaml\n# Key specifies the attribute to act upon.\n• key: \n  action: hash\n  # Rule specifies the regex pattern for attribute names to act upon.\n  pattern: \n\nFor the extract action,\n - key is required\n - pattern is required.\n yaml\n # Key specifies the attribute to extract values from.\n # The value of key is NOT altered.\n• key: \n  # Rule specifies the regex pattern used to extract attributes from the value\n  # of key.\n  # The submatchers must be named.\n  # If attributes already exist, they will be overwritten.\n  pattern: \n  action: extract\n\n \n\nFor the convert action,\n - key is required\n - action: convert is required.\n - convertedtype is required and must be one of int, double or string\nyaml\n# Key specifies the attribute to act upon.\n• key: \n  action: convert\n  convertedtype:",
     "pipelineTypes": [
@@ -1959,20 +1973,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     ],
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/drainprocessor/README.md",
     "repoPath": "processor/drainprocessor"
-  },
-  "dynamicsamplingprocessor": {
-    "description": "The Dynamic Sampling Processor performs adaptive tail-based trace sampling using first-match rules-based routing to dynamic samplers. Each sampler produces a known sample rate which is encoded as ot=th in W3C TraceState for correct downstream metric weighting.",
-    "pipelineTypes": [
-      "traces"
-    ],
-    "stability": [
-      {
-        "level": "development",
-        "type": "traces"
-      }
-    ],
-    "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/dynamicsamplingprocessor/README.md",
-    "repoPath": "processor/dynamicsamplingprocessor"
   },
   "filterprocessor": {
     "description": "[!NOTE]\nThis documentation applies only to version 0.146.0 and later. Configuration from previous version is still supported, but no longer documented in this README. For information on earlier versions, please refer to the previous documentation.",
@@ -2388,6 +2388,20 @@ export const componentDocs: Record<string, ComponentDoc> = {
     ],
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/schemaprocessor/README.md",
     "repoPath": "processor/schemaprocessor"
+  },
+  "signingprocessor": {
+    "description": "The signing processor adds cryptographic integrity attributes to log records.\nFor each log record it computes a canonical JSON hash (RFC 8785 / JCS) over\nthe full record and signs it with an RSA private key.  The resulting signature\nis stored as audit.integrity.value attribute on the record, and the JWA\nalgorithm identifier plus a certificate reference are stored as\naudit.integrity.algorithm and audit.integrity.certificate on the enclosing\nResource.\n\nThe processor is designed for use with the OpenTelemetry Audit Logging\nsignal\nand satisfies the Tier-2 Collector integrity-verification requirements defined\nthere.",
+    "pipelineTypes": [
+      "logs"
+    ],
+    "stability": [
+      {
+        "level": "development",
+        "type": "logs"
+      }
+    ],
+    "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/signingprocessor/README.md",
+    "repoPath": "processor/signingprocessor"
   },
   "spanprocessor": {
     "description": "The span processor modifies the span name based on its attributes or extract span attributes from the span name. It also allows\nto change span status. Please refer to config.go for the config spec.\n\nIt optionally supports the ability to include/exclude spans.\n\nThe following actions are supported:\n\n• name: Modify the name of attributes within a span\n• status: Modify the status of the span\n\n### Name a span\n\nThe following settings are required:\n\n• fromattributes: The attribute value for the keys are used to create a\nnew name in the order specified in the configuration.\n\nThe following settings can be optionally configured:\n\n• separator: A string, which is specified will be used to split values\n\nNote: If renaming is dependent on attributes being modified by the attributes\nprocessor, ensure the span processor is specified after the attributes\nprocessor in the pipeline specification.\n\nyaml\nspan:\n  name:\n    # fromattributes represents the attribute keys to pull the values from to generate the\n    # new span name.\n    fromattributes: [, , ...]\n    # Separator is the string used to concatenate various parts of the span name.\n    separator: \n\nExample:\n\nyaml\nspan:\n  name:\n    fromattributes: [\"db.svc\", \"operation\"]\n    separator: \"::\"\n\nRefer to config.yaml for detailed\nexamples on using the processor.\n\n### Extract attributes from span name\n\nTakes a list of regular expressions to match span name against and extract\nattributes from it based on subexpressions. Must be specified under the\ntoattributes section.\n\nThe following settings are required:\n\n• rules: A list of rules to extract attribute values from span name. The values\nin the span name are replaced by extracted attribute names. Each rule in the list\nis regex pattern string. Span name is checked against the regex and if the regex\nmatches then all named subexpressions of the regex are extracted as attributes\nand are added to the span. Each subexpression name becomes an attribute name and\nsubexpression matched portion becomes the attribute value. The matched portion\nin the span name is replaced by extracted attribute name. If the attributes\nalready exist in the span then they will be overwritten. The process is repeated\nfor all rules in the order they are specified. Each subsequent rule works on the\nspan name that is the output after processing the previous rule.\n• breakaftermatch (default = false): specifies if processing of rules should stop after the first\nmatch. If it is false rule processing will continue to be performed over the\nmodified span name.\n• keeporiginalname (default = false): specifies if the original span name should be kept after \nprocessing the rules. If it is true, the original span name will be kept,\notherwise it will be replaced with the placeholders of the captured attributes.\n\nyaml\nspan/toattributes:\n  name:\n    toattributes:\n      rules:\n        - regexp-rule1\n        - regexp-rule2\n        - regexp-rule3\n        ...\n      breakaftermatch: \n      keeporiginalname: \n\nExample:\n\nyaml\n# Let's assume input span name is /api/v1/document/12345678/update\n# Applying the following results in output span name /api/v1/document/{documentId}/update\n# and will add a new attribute \"documentId\"=\"12345678\" to the span.\nspan/toattributes:\n  name:\n    toattributes:\n      rules:\n        - ^\\/api\\/v1\\/document\\/(?P.)\\/update$\n\n# This example will add the same new \"documentId\"=\"12345678\" attribute,\n# but now resulting in an unchanged span name (/api/v1/document/12345678/update).\nspan/toattributeskeeporiginalname:\n  name:\n    toattributes:\n      keeporiginalname: true\n      rules:\n        - ^\\/api\\/v1\\/document\\/(?P.)\\/update$\n\n### Set status for span\n\nThe following setting is required:\n\n• code: Represents span status. One of the following values \"Unset\", \"Error\", \"Ok\".\n\nThe following setting is allowed only for code \"Error\":\n• description\n\nExample:\n\nyaml\n# Set status allows to set specific status for a given span. Possible values are\n# Ok, Error and Unset as per\n# https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/api.md#set-status\n# The description field allows to set a human-readable message for errors.\nspan/setstatus:\n  status:\n    code: Error\n    description: \"some error description\"\n\nRefer to config.yaml for detailed\nexamples on using the processor.",
