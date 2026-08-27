@@ -3179,10 +3179,15 @@ export const componentDocs: Record<string, ComponentDoc> = {
   "opensearchexporter": {
     "description": "OpenSearch exporter supports sending OpenTelemetry signals as documents to OpenSearch.\n\nThe documents are sent using observability catalog schema.",
     "pipelineTypes": [
+      "metrics",
       "traces",
       "logs"
     ],
     "stability": [
+      {
+        "level": "development",
+        "type": "metrics"
+      },
       {
         "level": "alpha",
         "type": "traces"
