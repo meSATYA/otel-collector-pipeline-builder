@@ -2131,15 +2131,15 @@ export const componentDocs: Record<string, ComponentDoc> = {
         "type": "profiles"
       },
       {
-        "level": "beta",
+        "level": "stable",
         "type": "logs"
       },
       {
-        "level": "beta",
+        "level": "stable",
         "type": "metrics"
       },
       {
-        "level": "beta",
+        "level": "stable",
         "type": "traces"
       }
     ],
