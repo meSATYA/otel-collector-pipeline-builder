@@ -2365,6 +2365,20 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/resourceprocessor/README.md",
     "repoPath": "processor/resourceprocessor"
   },
+  "rollingspanlatencyprocessor": {
+    "description": "Labels spans as slow or veryslow based on a per-key rolling latency baseline, so that\ndownstream tail-sampling, alerting, or routing decisions can react to spans that are anomalously\nslow relative to their own historical behavior rather than a fixed static threshold.\n\nFor each incoming span, the processor computes a key from the span name and a configurable set of\nresource attributes (e.g. service name, namespace, deployment environment), and maintains an\nexponentially-weighted moving average (EWMA) of that key's duration. Once a key has accumulated\nenough observations to warm up, spans whose duration deviates from the rolling mean by more than a\nconfigured number of standard deviations are labeled accordingly.\n\n[!NOTE]\nThis component currently only establishes its configuration and component structure. The\nrolling-baseline tracking and attribute-labeling logic will be added in a follow-up PR, per the\ndonation process.\nUntil then, this processor passes traces through unchanged.",
+    "pipelineTypes": [
+      "traces"
+    ],
+    "stability": [
+      {
+        "level": "development",
+        "type": "traces"
+      }
+    ],
+    "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/rollingspanlatencyprocessor/README.md",
+    "repoPath": "processor/rollingspanlatencyprocessor"
+  },
   "schemaprocessor": {
     "description": "The Schema Processor is used to convert existing telemetry data or signals to a version of the semantic convention defined as part of the configuration.\nThe processor works by using a set of target schema URLs that are used to match incoming signals.\nOn a match, the processor will fetch the schema translation file (if not cached) set by the incoming signal and apply the transformations\nrequired to export as the target semantic convention version.\n\nFurthermore, it is also possible for organisations and vendors to publish their own semantic conventions and be used by this processor,\nbe sure to follow schema overview for all the details.\n\nFor a practical guide on how to use the processor, including migration workflows and monitoring, see the Operators Guide.",
     "pipelineTypes": [
