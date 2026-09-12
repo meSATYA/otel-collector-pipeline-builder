@@ -3176,20 +3176,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/logzioexporter/README.md",
     "repoPath": "exporter/logzioexporter"
   },
-  "mezmoexporter": {
-    "description": "See the official mezmoexporter documentation for details.",
-    "pipelineTypes": [
-      "logs"
-    ],
-    "stability": [
-      {
-        "level": "deprecated",
-        "type": "logs"
-      }
-    ],
-    "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/mezmoexporter/README.md",
-    "repoPath": "exporter/mezmoexporter"
-  },
   "opensearchexporter": {
     "description": "OpenSearch exporter supports sending OpenTelemetry signals as documents to OpenSearch.\n\nThe documents are sent using observability catalog schema.",
     "pipelineTypes": [
