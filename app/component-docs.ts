@@ -2483,6 +2483,30 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/tailsamplingprocessor/README.md",
     "repoPath": "processor/tailsamplingprocessor"
   },
+  "telemetrypolicyprocessor": {
+    "description": "[!NOTE]\nThis component is a work-in-progress. See #50965.",
+    "pipelineTypes": [
+      "logs",
+      "metrics",
+      "traces"
+    ],
+    "stability": [
+      {
+        "level": "development",
+        "type": "logs"
+      },
+      {
+        "level": "development",
+        "type": "metrics"
+      },
+      {
+        "level": "development",
+        "type": "traces"
+      }
+    ],
+    "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/telemetrypolicyprocessor/README.md",
+    "repoPath": "processor/telemetrypolicyprocessor"
+  },
   "transformprocessor": {
     "description": "[!NOTE]\nThis documentation applies only to version 0.120.0 and later. Configuration from previous version is still supported, but no longer documented in this README. For information on earlier versions, please refer to the previous documentation.\n\nThe Transform Processor modifies telemetry based on configuration using the OpenTelemetry Transformation Language (OTTL).\n\nFor each signal type, the processor takes a list of statements and executes them against the incoming telemetry, following the order specified in the configuration.\nEach statement can access and transform telemetry using functions, and allows the use of a condition to help decide whether the function should be executed.\n\n• Config\n• Grammar\n• Supported functions\n• Examples\n• Troubleshooting\n• Contributing\n• Feature Gate",
     "pipelineTypes": [
@@ -3564,6 +3588,13 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "stability": [],
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/extension/encoding/README.md",
     "repoPath": "extension/encoding"
+  },
+  "filetelemetrypolicyextension": {
+    "description": "The File Telemetry Policy Extension provides telemetry policies loaded from local files to consumers such as the telemetrypolicy processor.",
+    "pipelineTypes": [],
+    "stability": [],
+    "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/extension/filetelemetrypolicyextension/README.md",
+    "repoPath": "extension/filetelemetrypolicyextension"
   },
   "googleclientauthextension": {
     "description": "See the official googleclientauthextension documentation for details.",
