@@ -3840,7 +3840,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "repoPath": "connector/failoverconnector"
   },
   "grafanacloudconnector": {
-    "description": "See the official grafanacloudconnector documentation for details.",
+    "description": "Deprecation Notice: The component type has been renamed from grafanacloud to grafanacloud\nto follow the OpenTelemetry snakecase naming convention.\nThe old name grafanacloud still works but is deprecated and will be removed in a future release.\nPlease update your configuration to use grafanacloud.",
     "pipelineTypes": [
       "traces",
       "metrics"
