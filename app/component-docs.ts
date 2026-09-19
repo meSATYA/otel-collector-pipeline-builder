@@ -2183,15 +2183,15 @@ export const componentDocs: Record<string, ComponentDoc> = {
     ],
     "stability": [
       {
-        "level": "development",
+        "level": "alpha",
         "type": "logs"
       },
       {
-        "level": "development",
+        "level": "alpha",
         "type": "traces"
       },
       {
-        "level": "development",
+        "level": "alpha",
         "type": "metrics"
       }
     ],
