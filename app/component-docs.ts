@@ -2508,7 +2508,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "repoPath": "processor/telemetrypolicyprocessor"
   },
   "transformprocessor": {
-    "description": "[!NOTE]\nThis documentation applies only to version 0.120.0 and later. Configuration from previous version is still supported, but no longer documented in this README. For information on earlier versions, please refer to the previous documentation.\n\nThe Transform Processor modifies telemetry based on configuration using the OpenTelemetry Transformation Language (OTTL).\n\nFor each signal type, the processor takes a list of statements and executes them against the incoming telemetry, following the order specified in the configuration.\nEach statement can access and transform telemetry using functions, and allows the use of a condition to help decide whether the function should be executed.\n\n• Config\n• Grammar\n• Supported functions\n• Examples\n• Troubleshooting\n• Contributing\n• Feature Gate",
+    "description": "The Transform Processor modifies telemetry based on configuration using the OpenTelemetry Transformation Language (OTTL).\n\nFor each signal type, the processor takes a list of statements and executes them against the incoming telemetry, following the order specified in the configuration.\nEach statement can access and transform telemetry using functions, and allows the use of a condition to help decide whether the function should be executed.\n\n• Config\n• Grammar\n• Supported functions\n• Examples\n• Troubleshooting\n• Contributing\n• Feature Gate\n• Compatibility\n• Performance and scaling\n• Self-observability",
     "pipelineTypes": [
       "profiles",
       "traces",
