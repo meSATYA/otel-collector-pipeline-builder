@@ -3200,6 +3200,30 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/logzioexporter/README.md",
     "repoPath": "exporter/logzioexporter"
   },
+  "natsexporter": {
+    "description": "Exports traces, metrics, and logs to a NATS server. Payloads\nare published to NATS subjects using core NATS (fire-and-forget) or, optionally,\nJetStream for durable,\nacknowledged delivery.\n\n[!NOTE]\nThis component is in development. The configuration surface described below is\nstable, but the publishing implementation is being contributed incrementally.",
+    "pipelineTypes": [
+      "traces",
+      "metrics",
+      "logs"
+    ],
+    "stability": [
+      {
+        "level": "development",
+        "type": "traces"
+      },
+      {
+        "level": "development",
+        "type": "metrics"
+      },
+      {
+        "level": "development",
+        "type": "logs"
+      }
+    ],
+    "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/natsexporter/README.md",
+    "repoPath": "exporter/natsexporter"
+  },
   "opensearchexporter": {
     "description": "OpenSearch exporter supports sending OpenTelemetry signals as documents to OpenSearch.\n\nThe documents are sent using observability catalog schema.",
     "pipelineTypes": [
