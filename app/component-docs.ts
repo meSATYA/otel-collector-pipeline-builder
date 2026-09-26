@@ -272,7 +272,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "repoPath": "receiver/azuremonitorreceiver"
   },
   "carbonreceiver": {
-    "description": ":informationsource: The wavefront receiver is based on Carbon and binds to the\nsame port by default. This means the carbon and wavefront receivers\ncannot both be enabled with their respective default configurations. To\nsupport running both receivers in parallel, change the endpoint port on one\nof the receivers.",
+    "description": "See the official carbonreceiver documentation for details.",
     "pipelineTypes": [
       "metrics"
     ],
@@ -1710,20 +1710,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     ],
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/vcrreceiver/README.md",
     "repoPath": "receiver/vcrreceiver"
-  },
-  "wavefrontreceiver": {
-    "description": "The Wavefront receiver accepts metrics and depends on carbonreceiver proto\nand\ntransport,\nIt's very similar to Carbon: it is TCP based in which each received text line\nrepresents a single metric data point. They differ on the format of their\ntextual representation. The Wavefront receiver leverages the Carbon receiver\ncode by implementing a dedicated parser for its format.\n\nThe receiver receives the string with Wavefront metric data, and transforms\nit to the collector metric format. See\nhttps://docs.wavefront.com/wavefrontdataformat.html#metrics-data-format-syntax.\nEach line received represents a Wavefront metric in the following format:\n\n  [] source= [pointTags]\n\n:informationsource: The wavefront receiver is based on Carbon and binds to the\nsame port by default. This means the carbon and wavefront receivers\ncannot both be enabled with their respective default configurations. To\nsupport running both receivers in parallel, change the endpoint port on one\nof the receivers.",
-    "pipelineTypes": [
-      "metrics"
-    ],
-    "stability": [
-      {
-        "level": "deprecated",
-        "type": "metrics"
-      }
-    ],
-    "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/wavefrontreceiver/README.md",
-    "repoPath": "receiver/wavefrontreceiver"
   },
   "webhookeventreceiver": {
     "description": "See the official webhookeventreceiver documentation for details.",
