@@ -1732,7 +1732,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     ],
     "stability": [
       {
-        "level": "alpha",
+        "level": "beta",
         "type": "logs"
       }
     ],
@@ -2358,7 +2358,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     ],
     "stability": [
       {
-        "level": "development",
+        "level": "alpha",
         "type": "traces"
       }
     ],
@@ -3747,7 +3747,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "repoPath": "extension/sumologicextension"
   },
   "tailstorage": {
-    "description": "# Pebble Tail Storage Extension\n\nThe Pebble Tail Storage Extension stores pending trace data on local disk for the\nTail Sampling processor.\n\nThis extension is intended to be used with the Tail Sampling processor tailstorage\nsetting and is useful when in-memory pending-trace state would otherwise be too large.",
+    "description": "# Pebble Tail Storage Extension\n\nThe Pebble Tail Storage Extension stores pending trace data on local disk for the\nTail Sampling processor.\n\nUse it with the Tail Sampling processor tailstorage setting when the pending\ntrace state would otherwise be too large to keep in memory. Spans for traces that\nare still waiting for a sampling decision are written to a local\nPebble database instead of being held in\nmemory. When the processor makes a decision, it reads the spans back and deletes\nthem from the database.",
     "pipelineTypes": [],
     "stability": [],
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/extension/tailstorage/pebbletailstorageextension/README.md",
