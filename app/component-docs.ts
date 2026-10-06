@@ -1816,7 +1816,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     ],
     "stability": [
       {
-        "level": "development",
+        "level": "alpha",
         "type": "traces"
       }
     ],
@@ -2225,6 +2225,35 @@ export const componentDocs: Record<string, ComponentDoc> = {
     ],
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/metricstransformprocessor/README.md",
     "repoPath": "processor/metricstransformprocessor"
+  },
+  "partitioningprocessor": {
+    "description": "[!NOTE]\nThis component was originally developed by @axw in\naxw/otel-partitioning-processor\nand donated to this repository. See #39199.\n\nA processor that partitions incoming telemetry batches using OTTL value expressions. Each incoming batch is split into one or more sub-batches whose items all evaluate to the same set of partition key values. Each sub-batch is forwarded to the next consumer concurrently with the evaluated key/value pairs appended to the outgoing request metadata.\n\nUse cases\n\n• Kafka topic routing and message keying — partition by a resource attribute to control which topic and/or partition key each batch lands on, without the multi-resource routing bug present in the Kafka exporter.\n• Multi-tenant pipelines — split a mixed-tenant batch so that each downstream exporter call sees only one tenant's data.\n• Metadata-aware batching — combine with a metadata-keyed batch sender (see otelcol#10825) so that all data for a given partition key is batched together before export.",
+    "pipelineTypes": [
+      "logs",
+      "metrics",
+      "traces",
+      "profiles"
+    ],
+    "stability": [
+      {
+        "level": "development",
+        "type": "logs"
+      },
+      {
+        "level": "development",
+        "type": "metrics"
+      },
+      {
+        "level": "development",
+        "type": "traces"
+      },
+      {
+        "level": "development",
+        "type": "profiles"
+      }
+    ],
+    "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/processor/partitioningprocessor/README.md",
+    "repoPath": "processor/partitioningprocessor"
   },
   "probabilisticsamplerprocessor": {
     "description": "The probabilistic sampler processor supports several modes of sampling\nfor spans and log records.  Sampling is performed on a per-request\nbasis, considering individual items statelessly.  For whole trace\nsampling, see\ntailsamplingprocessor.\n\nFor trace spans, this sampler supports probabilistic sampling based on\na configured sampling percentage applied to the TraceID.  In addition,\nthe sampler recognizes a sampling.priority annotation, which can\nforce the sampler to apply 0% or 100% sampling.\n\nFor log records, this sampler can be configured to use the embedded\nTraceID and follow the same logic as applied to spans.  When the\nTraceID is not defined, the sampler can be configured to apply hashing\nto a selected log record attribute.  This sampler also supports\nsampling priority.",
