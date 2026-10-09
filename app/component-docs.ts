@@ -1403,7 +1403,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     ],
     "stability": [
       {
-        "level": "unmaintained",
+        "level": "beta",
         "type": "metrics"
       }
     ],
