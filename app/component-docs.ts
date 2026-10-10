@@ -2931,16 +2931,12 @@ export const componentDocs: Record<string, ComponentDoc> = {
   "elasticsearchexporter": {
     "description": "This exporter supports sending logs, metrics, traces and profiles to Elasticsearch.\n\nThe Exporter is API-compatible with Elasticsearch 7.17.x, 8.x, and 9.x. Certain features of the exporter,\nsuch as the otel mapping mode, may require newer versions of Elasticsearch. Limited effort will\nbe made to support EOL versions of Elasticsearch -- see https://www.elastic.co/support/eol.",
     "pipelineTypes": [
-      "metrics",
       "profiles",
       "traces",
-      "logs"
+      "logs",
+      "metrics"
     ],
     "stability": [
-      {
-        "level": "development",
-        "type": "metrics"
-      },
       {
         "level": "development",
         "type": "profiles"
@@ -2952,6 +2948,10 @@ export const componentDocs: Record<string, ComponentDoc> = {
       {
         "level": "beta",
         "type": "logs"
+      },
+      {
+        "level": "beta",
+        "type": "metrics"
       }
     ],
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/elasticsearchexporter/README.md",
@@ -3587,7 +3587,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "repoPath": "extension/azureauthextension"
   },
   "basicauthextension": {
-    "description": "This extension implements both configauth.ServerAuthenticator and configauth.ClientAuthenticator to authenticate clients and servers using Basic Authentication. The authenticator type has to be set to basicauth.\n\nWhen used as ServerAuthenticator, if the authentication is successful client.Info.Auth will expose the following attributes:\n\n• username: The username of the authenticated user.\n• raw: Raw base64 encoded credentials.\n\nThe configuration should specify only one instance of basicauth extension for either client or server authentication. \n\nThe following are the configuration options:\n\n• htpasswd.file:  The path to the htpasswd file.\n• htpasswd.inline: The htpasswd file inline content.\n• clientauth.username: Username to use for client authentication.\n• clientauth.usernamefile: Path to a file containing the username. If set, takes precedence over username. The file is watched for changes, allowing rotation without restarting the collector.\n• clientauth.password: Password to use for client authentication.\n• clientauth.passwordfile: Path to a file containing the password. If set, takes precedence over password. The file is watched for changes, allowing rotation without restarting the collector.\n\nTo configure the extension as a server authenticator, either one of htpasswd.file or htpasswd.inline has to be set. If both are configured, htpasswd.inline credentials take precedence.\n\nTo configure the extension as a client authenticator, clientauth has to be set.\n\nIf both the options are configured, the extension will throw an error.",
+    "description": "This extension implements both configauth.ServerAuthenticator and configauth.ClientAuthenticator to authenticate clients and servers using Basic Authentication. The authenticator type has to be set to basicauth.\n\nWhen used as ServerAuthenticator, if the authentication is successful client.Info.Auth will expose the following attributes:\n\n• username: The username of the authenticated user.\n• raw: Raw base64 encoded credentials.\n\nThe configuration should specify only one instance of basicauth extension for either client or server authentication. \n\nThe following are the configuration options:\n\n• htpasswd.file:  The path to the htpasswd file.\n• htpasswd.inline: The htpasswd file inline content.\n• htpasswd.secretprovider.id: Component ID of a secret provider extension (e.g., mysecretprovider/server). The secret value must be htpasswd-formatted content.\n• clientauth.username: Username to use for client authentication.\n• clientauth.usernamefile: Path to a file containing the username. If set, takes precedence over username. The file is watched for changes, allowing rotation without restarting the collector.\n• clientauth.password: Password to use for client authentication.\n• clientauth.passwordfile: Path to a file containing the password. If set, takes precedence over password. The file is watched for changes, allowing rotation without restarting the collector.\n• clientauth.secretprovider.id: Component ID of a secret provider extension (e.g., mysecretprovider/client). The secret value must be a JSON object.\n• clientauth.secretprovider.usernamekey: JSON key for the username (required with secretprovider).\n• clientauth.secretprovider.passwordkey: JSON key for the password (required with secretprovider).\n\nTo configure the extension as a server authenticator, one of htpasswd.file, htpasswd.inline, or htpasswd.secretprovider has to be set. If both file and inline are configured, htpasswd.inline credentials take precedence.\n\nTo configure the extension as a client authenticator, clientauth has to be set with either inline credentials, file-based credentials, or secretprovider.\n\nOnly one credential source is allowed per mode: secretprovider cannot be combined with inline or file options.\n\nIf both htpasswd and clientauth are configured, the extension will throw an error.\n\n### Secret Provider\n\nThe secretprovider option delegates credential management to a separate extension that implements the SecretProvider interface (GetSecret + OnChange). This allows credentials to be fetched from external systems and automatically rotated without restarting the collector.\n\nThe referenced extension must be listed in service.extensions and will be started before basicauth automatically. A provider extension may be shared by several basicauth instances; it notifies every registered OnChange callback when the secret changes.\n\nThe examples below use mysecretprovider as a placeholder for any extension that implements the SecretProvider interface.",
     "pipelineTypes": [],
     "stability": [],
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/extension/basicauthextension/README.md",
