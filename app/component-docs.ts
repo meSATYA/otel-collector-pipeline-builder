@@ -576,6 +576,20 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/gitlabreceiver/README.md",
     "repoPath": "receiver/gitlabreceiver"
   },
+  "gnmireceiver": {
+    "description": "TODO",
+    "pipelineTypes": [
+      "metrics"
+    ],
+    "stability": [
+      {
+        "level": "development",
+        "type": "metrics"
+      }
+    ],
+    "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/gnmireceiver/README.md",
+    "repoPath": "receiver/gnmireceiver"
+  },
   "googlecloudmonitoringreceiver": {
     "description": "This receiver gets GCP (Google Cloud Platform) metrics from [GCP Monitoring REST API] via the [Google SDK for GCP Metrics] and then convert those timeseries data into OTel Format [Pipeline Data].\n\n[GCP Monitoring REST API]: https://cloud.google.com/monitoring/api/refv3/rest/v3/projects.timeSeries/list\n[Google SDK for GCP Metrics]: https://pkg.go.dev/cloud.google.com/go/monitoring/apiv3\n[Pipeline Data]: https://pkg.go.dev/go.opentelemetry.io/collector/pdata",
     "pipelineTypes": [
