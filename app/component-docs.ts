@@ -1023,6 +1023,30 @@ export const componentDocs: Record<string, ComponentDoc> = {
     "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/namedpipereceiver/README.md",
     "repoPath": "receiver/namedpipereceiver"
   },
+  "natsreceiver": {
+    "description": "Receives traces, metrics, and logs from a NATS server. The\nreceiver subscribes to NATS subjects using core NATS (at-most-once) or,\noptionally, consumes from a JetStream\nstream for durable, acknowledged delivery.\n\nThis is the receive-side counterpart to the NATS exporter.\nWith default settings, the two components use the same subjects and encoding.\n\n[!NOTE]\nThis component is in development. The configuration surface described below is\nstable, but the receiving implementation is being contributed incrementally.",
+    "pipelineTypes": [
+      "traces",
+      "metrics",
+      "logs"
+    ],
+    "stability": [
+      {
+        "level": "development",
+        "type": "traces"
+      },
+      {
+        "level": "development",
+        "type": "metrics"
+      },
+      {
+        "level": "development",
+        "type": "logs"
+      }
+    ],
+    "docsUrl": "https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/receiver/natsreceiver/README.md",
+    "repoPath": "receiver/natsreceiver"
+  },
   "netflowreceiver": {
     "description": "This receiver gives OpenTelemetry users the capability of monitoring network traffic, and answer questions like:\n\n• Which protocols are passing through the network?\n• Which servers and clients are producing the highest amount of traffic?\n• What ports are involved in these network calls?\n• How many bytes and packets are being sent and received?",
     "pipelineTypes": [
